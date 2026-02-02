@@ -3,11 +3,11 @@
 import mongoose from "mongoose";
 
 const reservationSchema = new mongoose.Schema({
-    user: {
+    /*user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: [true, 'El usuario es obligatorio']
-    },
+    },*/
     field: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Field',
@@ -43,5 +43,4 @@ const reservationSchema = new mongoose.Schema({
     },
 })
 
-// exportamos el modelo con el nombre Reservation
 export default mongoose.model('Reservation', reservationSchema);

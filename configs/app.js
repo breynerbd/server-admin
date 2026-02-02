@@ -9,8 +9,11 @@ import { dbConnection } from './db.js';
 
 //Rutas
 import fieldRoutes from '../src/fields/field.router.js';
+import reservationRoutes from '../src/reservations/reservation.router.js';
+import teamRoutes from '../src/teams/teams.router.js';
 
-const BASE_URL = '/kinalSportAdmin/v1';
+
+const BASE_URL = '/kinalSportsAdmin/v1';
 
 //Configuracion de mi aplicacion
 //Se almacena en una funcion para que pueda ser exportada o usada en un archivo
@@ -28,6 +31,9 @@ const middlewares = (app) => {
 //Integracion de todas las rutas
 const routes = (app) => {
     app.use(`${BASE_URL}/fields`, fieldRoutes);
+    app.use(`${BASE_URL}/reservations`, reservationRoutes);
+    app.use(`${BASE_URL}/teams`, teamRoutes); 
+
 }
 
 
