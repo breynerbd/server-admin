@@ -49,3 +49,36 @@ export const getFields = async (req, res) => {
     }
 }
 
+export const createFields = async (req, res) => {
+    try {
+        const fieldData = req.body;
+
+        if (req.file) {
+            const  extension = req.file.path.split('.').pop();
+            const fileName = req.file.filename;
+
+            const relativePath = fileName.substring(
+                fileName.indexOf('fields/')
+            );
+            fieldData.photo = `${relativePath}.${extension}`;
+        } else {
+            fieldData.photo = 'fields/kinal_sport_nyvxo5';
+        }
+
+        const field = new Field(fieldData);
+        await field.save();
+
+        res.status(201).json({
+            success: true,
+            message: 'campo agregado con exito',
+            data: field
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'error al crear el campo',
+            error: error.message
+        })       
+    }
+}
