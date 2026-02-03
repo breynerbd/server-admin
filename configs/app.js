@@ -4,8 +4,12 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import { helmet } from 'helmet';
 import { corsOptions } from './cors-configuration.js';
 import { dbConnection } from './db.js';
+import { helmetConfiguration } from './helmet-configuration.js';
+import { requestLimit } from '../middlewares/request-limit.js';
+import { errorHandler } from '../middlewares/handle-errors.js';
 
 //Rutas
 import fieldRoutes from '../src/fields/field.router.js';
@@ -19,13 +23,12 @@ const BASE_URL = '/kinalSportsAdmin/v1';
 //Se almacena en una funcion para que pueda ser exportada o usada en un archivo
 //usada al crear la instancia de la aplicacion
 const middlewares = (app) => {
-    app.use(express.urlencoded({ extended: false, limit: '10mb' }))
-    //Resivira json de menos de 10 megabytes
-    app.use(express.json({ limit: '10mb' }))
-    //
-    app.use(cors(corsOptions))
-    //Morgan nos explicara errores que surgiran en nuestro programa
-    app.use(morgan('dev'))
+    app.use(helmet(helmetConfiguration));
+    app.use(cors(corsOptions));
+    app.use(express.urlencoded({ extended: false, limit: '10mb' }));
+    app.use(express.json({ limit: '10mb' }));
+    app.use(requestLimit);
+    app.use(morgan('dev'));
 }
 
 //Integracion de todas las rutas
@@ -49,7 +52,7 @@ const initServer = async (app) => {
         dbConnection();
         middlewares(app);
         routes(app);
-
+        app.use(errorHandler);
         app.listen(PORT, () => {
             console.log(`Servidor corriendo en el puerto ${PORT}`);
             console.log(`Base URL: http://localhost:${PORT}${BASE_URL}`);
