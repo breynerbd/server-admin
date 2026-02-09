@@ -1,7 +1,7 @@
 {
   "name": "server-admin",
   "version": "1.0.0",
-  "description": "",
+  "description": "KinalSport es un sistema de administración para canchas deportivas, diseñado para gestionar **campos**, **torneos**, **equipos** y **reservas** de manera eficiente. Permite crear, actualizar, activar/desactivar y consultar información, gestionar torneos y reservas, con control de errores, validaciones y manejo de imágenes en la nube.",
   "type": "module",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "axios": "^1.13.3",
     "cloudinary": "^1.41.3",
     "cors": "^2.8.6",
-    "dotenv": "^17.2.3",
+    "dotenv": "^17.2.4",
     "express": "^5.2.1",
     "express-rate-limit": "^8.2.1",
     "express-validator": "^7.3.1",
@@ -33,5 +33,6 @@
     "multer": "^2.0.2",
     "multer-storage-cloudinary": "^4.0.0",
     "uuid": "^13.0.0"
-  }
+  },
+  "devDependencies": {}
 }

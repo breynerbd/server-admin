@@ -4,7 +4,7 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import { helmet } from 'helmet';
+import helmet from 'helmet';
 import { corsOptions } from './cors-configuration.js';
 import { dbConnection } from './db.js';
 import { helmetConfiguration } from './helmet-configuration.js';
@@ -15,6 +15,7 @@ import { errorHandler } from '../middlewares/handle-errors.js';
 import fieldRoutes from '../src/fields/field.router.js';
 import reservationRoutes from '../src/reservations/reservation.router.js';
 import teamRoutes from '../src/teams/teams.router.js';
+import tournamentRoutes from '../src/tournaments/tournament.router.js';
 
 
 const BASE_URL = '/kinalSportsAdmin/v1';
@@ -35,8 +36,8 @@ const middlewares = (app) => {
 const routes = (app) => {
     app.use(`${BASE_URL}/fields`, fieldRoutes);
     app.use(`${BASE_URL}/reservations`, reservationRoutes);
-    app.use(`${BASE_URL}/teams`, teamRoutes); 
-
+    app.use(`${BASE_URL}/teams`, teamRoutes);
+    app.use(`${BASE_URL}/tournaments`, tournamentRoutes);
 }
 
 

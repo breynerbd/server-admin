@@ -49,5 +49,4 @@ const tournamentSchema = new mongoose.Schema({
     }
 })
 
-// exportamos el modelo con el nombre Tournament
 export default mongoose.model('Tournament', tournamentSchema);
