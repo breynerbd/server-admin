@@ -93,17 +93,12 @@ export const createField = async (req, res) => {
     const fieldData = req.body;
 
     if (req.file) {
-      const extension = req.file.path.split(".").pop();
-
-      const filename = req.file.filename;
-
-      const relativePath = filename.substring(filename.indexOf("fields/"));
-
-      fieldData.photo = `${relativePath}.${extension}`;
+      // req.file.path ya es la URL completa de Cloudinary
+      fieldData.image = req.file.path;
     } else {
-      // Si no se envía archivo, usar imagen por defecto
-
-      fieldData.photo = "fields/kinal_sports_nyvxo5";
+      // Imagen por defecto
+      fieldData.image =
+        "https://res.cloudinary.com/die1jjc0t/image/upload/v1689999999/kinalSports/fields/default.jpg";
     }
 
     const field = new Field(fieldData);
@@ -112,17 +107,13 @@ export const createField = async (req, res) => {
 
     res.status(201).json({
       success: true,
-
       message: "Campo creado exitosamente",
-
       data: field,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-
       message: "Error al crear el campo",
-
       error: error.message,
     });
   }
@@ -139,35 +130,22 @@ export const updateField = async (req, res) => {
     if (req.file) {
       const currentField = await Field.findById(id);
 
-      if (currentField && currentField.photo) {
-        const photoPath = currentField.photo;
-
-        const photoWithoutExt = photoPath.substring(
-          0,
-
-          photoPath.lastIndexOf("."),
-        );
-
-        const publicId = `kinal_sports/${photoWithoutExt}`;
-
+      // Eliminar la imagen antigua de Cloudinary si existe
+      if (currentField && currentField.image) {
         try {
+          const publicId = currentField.image
+            .split("/")
+            .slice(-2)
+            .join("/")
+            .split(".")[0]; // ejemplo: fields/campo-1234abcd
           await cloudinary.uploader.destroy(publicId);
         } catch (deleteError) {
-          console.error(
-            `Error al eliminar imagen anterior de Cloudinary: ${deleteError.message}`,
-          );
+          console.error(`Error al eliminar imagen anterior: ${deleteError.message}`);
         }
       }
 
-      const extension = req.file.path.split(".").pop();
-
-      const filename = req.file.filename;
-
-      const relativePath = filename.includes("fields/")
-        ? filename.substring(filename.indexOf("fields/"))
-        : filename;
-
-      updateData.photo = `${relativePath}.${extension}`;
+      // Guardar la nueva URL completa
+      updateData.image = req.file.path;
     }
 
     const field = await Field.findByIdAndUpdate(id, updateData, {
